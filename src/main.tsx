@@ -3,22 +3,37 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-const globalWorkerThread = new SharedWorker(new URL("./worker.ts", import.meta.url), {
+const sharedWorkerThread = new SharedWorker(new URL("./sharedWorker.ts", import.meta.url), {
   type: "module",
-  name: "globalWorker",
+  name: "worker-thread",
 });
 
-globalWorkerThread.port.start();
+sharedWorkerThread.port.start();
 
 class CustomElement extends HTMLElement {
   constructor() {
     super();
 
-    globalWorkerThread.port.onmessage = (event) => {
-      console.log(event.data);
+    sharedWorkerThread.port.onmessage = (event) => {
+      console.log("sharedWorkerThread.port.onmessage");
+
+      console.dir(event);
     };
 
-    globalWorkerThread.port.postMessage("Hello from browser thread");
+    sharedWorkerThread.port.postMessage("Hello from browser thread");
+
+    const viewletWorker = new Worker(new URL("./viewletWorker.ts", import.meta.url), {
+      type: "module",
+      name: "viewletWorker",
+    });
+
+    viewletWorker.onmessage = (event) => {
+      console.log("viewletWorker.onmessage");
+
+      console.dir(event);
+    };
+
+    viewletWorker.postMessage("Hello from browser thread");
   }
   connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: "open" });
