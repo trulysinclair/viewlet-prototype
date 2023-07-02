@@ -3,9 +3,22 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
+const globalWorkerThread = new SharedWorker(new URL("./worker.ts", import.meta.url), {
+  type: "module",
+  name: "globalWorker",
+});
+
+globalWorkerThread.port.start();
+
 class CustomElement extends HTMLElement {
   constructor() {
     super();
+
+    globalWorkerThread.port.onmessage = (event) => {
+      console.log(event.data);
+    };
+
+    globalWorkerThread.port.postMessage("Hello from browser thread");
   }
   connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: "open" });
@@ -56,7 +69,7 @@ class CustomElement extends HTMLElement {
     });
 
     console.log("adoptedStyleSheets");
-    console.log(shadowRoot.adoptedStyleSheets);
+    // console.log(shadowRoot.adoptedStyleSheets);
 
     ReactDOM.createRoot(
       shadowRoot,
