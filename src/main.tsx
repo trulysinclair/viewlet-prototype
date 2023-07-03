@@ -1,5 +1,6 @@
 import App from "./ViewletA.tsx";
 import "./index.css";
+import AbstractApplet from "./lib/AbstractApplet.tsx";
 import AbstractViewlet from "./lib/AbstractViewlet.tsx";
 
 class TitleBarElement extends AbstractViewlet {
@@ -11,6 +12,12 @@ class TitleBarElement extends AbstractViewlet {
   render = () => {
     return <App name="Titlebar" />;
   };
+}
+
+class DemoApplet extends AbstractApplet {
+  constructor() {
+    super();
+  }
 }
 
 class StatusBarElement extends AbstractViewlet {
@@ -47,4 +54,5 @@ class CustomElement extends AbstractViewlet {
 customElements.define("titlebar-element", TitleBarElement);
 customElements.define("sidebar-element", SideBarElement);
 customElements.define("custom-element", CustomElement);
-customElements.define("statusbar-element", StatusBarElement);
+// customElements.define("statusbar-element", StatusBarElement);
+customElements.define("demo-applet", DemoApplet);

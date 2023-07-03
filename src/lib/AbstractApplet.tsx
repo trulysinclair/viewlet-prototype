@@ -1,8 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-
-abstract class AbstractViewlet extends HTMLElement {
-  #reactDomRoot?: ReactDOM.Root;
+abstract class AbstractApplet extends HTMLElement {
+  // #reactDomRoot?: ReactDOM.Root;
   static get observedAttributes() {
     return ["namer"];
   }
@@ -16,41 +13,31 @@ abstract class AbstractViewlet extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.#reactDomRoot = ReactDOM.createRoot(this.shadowRoot as ShadowRoot);
+    // this.#reactDomRoot = ReactDOM.createRoot(this.shadowRoot as ShadowRoot);
     this.#adoptDocumentStyleSheets();
 
-    if (window.self !== window.top)
-      console.log("SubViewlet");
-    else
-      console.log("Viewlet");
-  }
+    // if (window.self !== window.top) {
+    //   this.shadowRoot?.addEventListener("click", (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     // stop clicks from passing through
+    //   });
 
-  /**
-   * Renders the element into the React Shadow DOM.
-   *
-   * Subclasses must implement this method to return a ReactNode.
-   * Render is called when the element is connected to the DOM.
-   * @returns
-   */
-  protected render: () => React.ReactNode = () => {
-    return <div>Viewlet</div>;
-  };
+    //   alert("Applet");
+    // }
+
+    if (window.self !== window.top)
+      console.log("SubApplet");
+    else
+      console.log("Applet");
+  }
 
   connectedCallback() {
     this.classList.add("flex");
     this.classList.add("flex-col");
 
-    if (this.shadowRoot && this.render && this.#reactDomRoot) {
-      this.#reactDomRoot.render(
-        this.strictModeEnabled
-          ? (
-            <React.StrictMode>
-              {this.render()}
-            </React.StrictMode>
-          )
-          : this.render(),
-      );
-    }
+    if (this.shadowRoot)
+      this.shadowRoot.innerHTML = "<iframe src='http://localhost:5173/' class='w-full h-full' />";
   }
 
   #adoptDocumentStyleSheets() {
@@ -89,4 +76,4 @@ abstract class AbstractViewlet extends HTMLElement {
   }
 }
 
-export default AbstractViewlet;
+export default AbstractApplet;
