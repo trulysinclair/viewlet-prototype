@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import App from "./ViewletA.tsx";
 import "./index.css";
 
 const sharedWorkerThread = new SharedWorker(new URL("./sharedWorker.ts", import.meta.url), {
@@ -10,9 +10,20 @@ const sharedWorkerThread = new SharedWorker(new URL("./sharedWorker.ts", import.
 
 sharedWorkerThread.port.start();
 
-class CustomElement extends HTMLElement {
+abstract class Viewlet extends HTMLElement {
+  // enable observedAttributes to get attributeChangedCallback
+  static get observedAttributes() {
+    return ["namer"];
+  }
+
+  attributeChangedCallback(name: any, oldValue: any, newValue: any) {
+    console.log("attributeChangedCallback", name, oldValue, newValue);
+  }
+
   constructor() {
     super();
+    this.attachShadow({ mode: "open" });
+    this.#adoptDocumentStyleSheets();
 
     sharedWorkerThread.port.onmessage = (event) => {
       console.log("sharedWorkerThread.port.onmessage");
@@ -35,67 +46,103 @@ class CustomElement extends HTMLElement {
 
     viewletWorker.postMessage("Hello from browser thread");
   }
+
+  protected render: () => React.ReactNode = () => {
+    return <div>Viewlet</div>;
+  };
+
   connectedCallback() {
-    const shadowRoot = this.attachShadow({ mode: "open" });
-
-    const sheets = document.styleSheets;
-    console.group("sheets");
-    console.log(sheets);
-
     this.classList.add("flex");
     this.classList.add("flex-col");
 
-    Array.from(sheets).forEach((sheet) => {
-      console.group("sheet");
-      console.log(sheet);
+    if (this.shadowRoot && this.render) {
+      ReactDOM.createRoot(
+        this.shadowRoot,
+      ).render(
+        <React.StrictMode>
+          {this.render()}
+        </React.StrictMode>,
+      );
+    }
+  }
 
+  #adoptDocumentStyleSheets() {
+    const sheets = document.styleSheets;
+
+    Array.from(sheets).forEach((sheet) => {
       if (sheet.href) {
-        console.group("sheet.href");
+        if (!this.shadowRoot)
+          return;
 
         const link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = sheet.href;
 
-        shadowRoot.appendChild(link);
-
-        console.groupEnd();
+        this.shadowRoot?.appendChild(link);
       } else {
-        console.group("sheet.cssRules");
-
         Array.from(sheet.cssRules).forEach((rule) => {
-          console.group("rule");
-          console.log(rule);
+          if (!this.shadowRoot)
+            return;
 
           const sht = new CSSStyleSheet();
           sht.insertRule(rule.cssText);
 
-          console.log(sht);
-
-          shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, sht];
-
-          console.log("adoptedStyleSheets");
-          console.log(shadowRoot.adoptedStyleSheets);
-
-          console.groupEnd();
+          this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, sht];
         });
-        console.groupEnd();
       }
-      console.groupEnd();
     });
+  }
 
-    console.log("adoptedStyleSheets");
-    // console.log(shadowRoot.adoptedStyleSheets);
+  disconnectedCallback() {
+    console.log("disconnectedCallback");
+  }
 
-    ReactDOM.createRoot(
-      shadowRoot,
-    ).render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>,
-    );
-
-    console.groupEnd();
+  adoptedCallback() {
+    console.log("adoptedCallback");
   }
 }
 
+class TitleBarElement extends Viewlet {
+  constructor() {
+    super();
+  }
+
+  protected render = () => {
+    return <App name="Titlebar" />;
+  };
+}
+
+class StatusBarElement extends Viewlet {
+  constructor() {
+    super();
+  }
+
+  protected render = () => {
+    return <App name="Statusbar" />;
+  };
+}
+
+class SideBarElement extends Viewlet {
+  constructor() {
+    super();
+  }
+
+  protected render = () => {
+    return <App name="Sidebar" />;
+  };
+}
+
+class CustomElement extends Viewlet {
+  constructor() {
+    super();
+  }
+
+  protected render = () => {
+    return <App name="Custom" />;
+  };
+}
+
 customElements.define("custom-element", CustomElement);
+customElements.define("titlebar-element", TitleBarElement);
+customElements.define("statusbar-element", StatusBarElement);
+customElements.define("sidebar-element", SideBarElement);

@@ -6,8 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Viewer Prototype</title>
   </head>
-  <body>
-    <custom-element class="w-full justify-center items-center"/>
+  <body class="grid grid-cols-2">
+    <titlebar-element class="w-full justify-center items-center"></titlebar-element>
+    <sidebar-element class="w-full justify-center items-center"></sidebar-element>
+
+    <custom-element namer="test" class="w-full justify-center items-center"></custom-element>
+    <statusbar-element class="w-full justify-center items-center"></statusbar-element>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
