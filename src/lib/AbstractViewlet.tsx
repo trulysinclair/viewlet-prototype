@@ -9,7 +9,7 @@ abstract class AbstractViewlet extends HTMLElement {
 
   protected strictModeEnabled?: boolean = true;
 
-  attributeChangedCallback(name: any, oldValue: any, newValue: any) {
+  attributeChangedCallback(name: string, oldValue: unknown, newValue: unknown) {
     console.log("attributeChangedCallback", name, oldValue, newValue);
   }
 
