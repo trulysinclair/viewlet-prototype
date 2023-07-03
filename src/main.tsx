@@ -5,6 +5,7 @@ import AbstractViewlet from "./lib/AbstractViewlet.tsx";
 class TitleBarElement extends AbstractViewlet {
   constructor() {
     super();
+    this.strictModeEnabled = true;
   }
 
   render = () => {
@@ -17,7 +18,7 @@ class StatusBarElement extends AbstractViewlet {
     super();
   }
 
-  render = () => {
+  render: () => React.ReactNode = () => {
     return <App name="Statusbar" />;
   };
 }
@@ -43,7 +44,7 @@ class CustomElement extends AbstractViewlet {
   };
 }
 
-customElements.define("custom-element", CustomElement);
 customElements.define("titlebar-element", TitleBarElement);
-customElements.define("statusbar-element", StatusBarElement);
 customElements.define("sidebar-element", SideBarElement);
+customElements.define("custom-element", CustomElement);
+customElements.define("statusbar-element", StatusBarElement);
