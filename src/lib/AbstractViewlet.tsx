@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 abstract class AbstractViewlet extends HTMLElement {
-  // enable observedAttributes to get attributeChangedCallback
   static get observedAttributes() {
     return ["namer"];
   }
@@ -15,27 +14,6 @@ abstract class AbstractViewlet extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.#adoptDocumentStyleSheets();
-
-    // sharedWorkerThread.port.onmessage = (event) => {
-    //   console.log("sharedWorkerThread.port.onmessage");
-
-    //   console.dir(event);
-    // };
-
-    // sharedWorkerThread.port.postMessage("Hello from browser thread");
-
-    // const viewletWorker = new Worker(new URL("./viewletWorker.ts", import.meta.url), {
-    //   type: "module",
-    //   name: "viewletWorker",
-    // });
-
-    // viewletWorker.onmessage = (event) => {
-    //   console.log("viewletWorker.onmessage");
-
-    //   console.dir(event);
-    // };
-
-    // viewletWorker.postMessage("Hello from browser thread");
   }
 
   protected render: () => React.ReactNode = () => {

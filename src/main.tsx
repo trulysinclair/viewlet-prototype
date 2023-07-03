@@ -2,13 +2,6 @@ import App from "./ViewletA.tsx";
 import "./index.css";
 import AbstractViewlet from "./lib/AbstractViewlet.tsx";
 
-// const sharedWorkerThread = new SharedWorker(new URL("./sharedWorker.ts", import.meta.url), {
-//   type: "module",
-//   name: "worker-thread",
-// });
-
-// sharedWorkerThread.port.start();
-
 class TitleBarElement extends AbstractViewlet {
   constructor() {
     super();
