@@ -7,7 +7,7 @@ class TitleBarElement extends AbstractViewlet {
     super();
   }
 
-  protected render = () => {
+  render = () => {
     return <App name="Titlebar" />;
   };
 }
@@ -17,7 +17,7 @@ class StatusBarElement extends AbstractViewlet {
     super();
   }
 
-  protected render = () => {
+  render = () => {
     return <App name="Statusbar" />;
   };
 }
@@ -27,7 +27,7 @@ class SideBarElement extends AbstractViewlet {
     super();
   }
 
-  protected render = () => {
+  render = () => {
     return <App name="Sidebar" />;
   };
 }
@@ -38,7 +38,7 @@ class CustomElement extends AbstractViewlet {
     super();
   }
 
-  protected render = () => {
+  render = () => {
     return <App name="Custom" />;
   };
 }
