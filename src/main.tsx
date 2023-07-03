@@ -132,6 +132,7 @@ class SideBarElement extends Viewlet {
   };
 }
 
+// export default class extends Viewlet {
 class CustomElement extends Viewlet {
   constructor() {
     super();
