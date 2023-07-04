@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Viewer Prototype</title>
-  </head>
-  <body class="grid grid-cols-2">
-    <titlebar-element class="w-full justify-center items-center"></titlebar-element>
-    <sidebar-element class="w-full justify-center items-center"></sidebar-element>
 
-    <custom-element namer="test" class="w-full justify-center items-center"></custom-element>
-    <demo-applet class="w-full justify-center items-center"></demo-applet>
-    <!-- <statusbar-element class="w-full justify-center items-center"></statusbar-element> -->
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Viewer Prototype</title>
+</head>
 
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<body class="flex flex-col">
+  <titlebar-element></titlebar-element>
+  <div class="flex grow">
+    <sidebar-element></sidebar-element>
+    <custom-element name="test" class="flex flex-col grow justify-center items-center"></custom-element>
+    <!-- <demo-applet class="flex flex-col w-full justify-center items-center"></demo-applet> -->
+  </div>
+  <statusbar-element></statusbar-element>
+
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

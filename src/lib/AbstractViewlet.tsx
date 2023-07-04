@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 abstract class AbstractViewlet extends HTMLElement {
   #reactDomRoot?: ReactDOM.Root;
   static get observedAttributes() {
-    return ["namer"];
+    return ["name"];
   }
 
   protected strictModeEnabled?: boolean = true;
@@ -15,14 +15,10 @@ abstract class AbstractViewlet extends HTMLElement {
 
   constructor() {
     super();
+
     this.attachShadow({ mode: "open" });
     this.#reactDomRoot = ReactDOM.createRoot(this.shadowRoot as ShadowRoot);
     this.#adoptDocumentStyleSheets();
-
-    if (window.self !== window.top)
-      console.log("SubViewlet");
-    else
-      console.log("Viewlet");
   }
 
   /**
@@ -37,9 +33,6 @@ abstract class AbstractViewlet extends HTMLElement {
   };
 
   connectedCallback() {
-    this.classList.add("flex");
-    this.classList.add("flex-col");
-
     if (this.shadowRoot && this.render && this.#reactDomRoot) {
       this.#reactDomRoot.render(
         this.strictModeEnabled
